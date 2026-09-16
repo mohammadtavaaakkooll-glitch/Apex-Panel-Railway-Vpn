@@ -17,7 +17,7 @@ DATA_DIR.mkdir(exist_ok=True, parents=True)
 
 DB_FILE = DATA_DIR / "db.json"
 LOG_FILE = DATA_DIR / "logs.json"
-CONFIG_FILE = DATA_DIR / "mtproto.json"
+CONFIG_FILE = DATA_DIR / "mtproto.toml"  # ← TOML نه JSON
 
 
 def load_json(path, default):
@@ -84,6 +84,22 @@ class MTProtoManager:
         return self.db.get("admin")
 
     # ---------- MTProto Proxy ----------
+    def _write_toml_config(self):
+        """نوشتن کانفیگ به فرمت TOML (mtg فقط TOML می‌خونه)"""
+        s = self.db["settings"]
+        lines = [
+            f'secret = "{s["secret"]}"',
+            f'bind-to = "0.0.0.0:{s["port"]}"',
+            f'concurrency = {s.get("max_connections", 10000)}',
+            'domain-fronting-port = 443',
+            'prefer-ip = "prefer-ipv6"',
+            'tolerate-time-skewness = true',
+            'secure-mode = true',
+            'debug = false',
+        ]
+        with open(CONFIG_FILE, "w", encoding="utf-8") as f:
+            f.write("\n".join(lines) + "\n")
+
     def start_proxy(self):
         if self.process and self.process.poll() is None:
             return False, "already running"
@@ -91,17 +107,8 @@ class MTProtoManager:
         self.reload()
         s = self.db["settings"]
 
-        config = {
-            "secret": s["secret"],
-            "bind-to": f"0.0.0.0:{s['port']}",
-            "concurrency": s.get("max_connections", 10000),
-            "domain-fronting-port": 443,
-            "prefer-ip": "prefer-ipv6",
-            "tolerate-time-skewness": True,
-            "secure-mode": True,
-            "debug": False
-        }
-        save_json(CONFIG_FILE, config)
+        # نوشتن کانفیگ TOML
+        self._write_toml_config()
 
         cmd = ["mtg", "run", str(CONFIG_FILE)]
         try:
@@ -112,11 +119,13 @@ class MTProtoManager:
                 text=True
             )
             self.started_at = datetime.now()
-            time.sleep(1)
+            time.sleep(2)
+
             if self.process.poll() is not None:
                 err = self.process.stderr.read()
                 self.process = None
-                return False, f"mtg failed: {err[:200]}"
+                return False, f"mtg failed: {err[:300]}"
+
             add_log("proxy_started", f"پورت {s['port']}")
             return True, "started"
         except Exception as e:
@@ -126,6 +135,10 @@ class MTProtoManager:
         if not self.process or self.process.poll() is not None:
             return False, "not running"
         self.process.terminate()
+        try:
+            self.process.wait(timeout=5)
+        except:
+            self.process.kill()
         self.process = None
         add_log("proxy_stopped", "")
         return True, "stopped"
@@ -172,7 +185,7 @@ class MTProtoManager:
         }
         self.db["users"].append(user)
         self.save()
-        add_log("user_created", f"{name}")
+        add_log("user_created", name)
         return user
 
     def delete_user(self, user_id):
