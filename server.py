@@ -1,5 +1,6 @@
 """
-APEX MTProto Proxy - Server Manager (Official MTProxy)
+APEX MTProto Proxy - Server Manager
+نسخه کامل با پشتیبانی TCP Proxy
 """
 import os
 import json
@@ -17,7 +18,8 @@ DATA_DIR.mkdir(exist_ok=True, parents=True)
 
 DB_FILE = DATA_DIR / "db.json"
 LOG_FILE = DATA_DIR / "logs.json"
-CONFIG_FILE = DATA_DIR / "mtproxy.conf"
+CONFIG_FILE = DATA_DIR / "mtproxy-config.conf"
+SECRET_FILE = DATA_DIR / "proxy-secret"
 
 
 def load_json(path, default):
@@ -70,6 +72,9 @@ class MTProtoManager:
     def save(self):
         save_json(DB_FILE, self.db)
 
+    # ============================================
+    # ADMIN
+    # ============================================
     def set_admin(self, username, password_hash):
         self.db["admin"] = {
             "username": username,
@@ -81,7 +86,9 @@ class MTProtoManager:
     def get_admin(self):
         return self.db.get("admin")
 
-    # ---------- MTProxy ----------
+    # ============================================
+    # MTProxy Control
+    # ============================================
     def start_proxy(self):
         if self.process and self.process.poll() is None:
             return False, "already running"
@@ -89,23 +96,47 @@ class MTProtoManager:
         self.reload()
         s = self.db["settings"]
 
-        # MTProxy با خط فرمان اجرا می‌شه، نه فایل کانفیگ
+        # ============================================
+        # Railway TCP Proxy Detection
+        # ============================================
+        tcp_domain = os.environ.get("RAILWAY_TCP_PROXY_DOMAIN", "")
+        tcp_port = os.environ.get("RAILWAY_TCP_PROXY_PORT", "")
+        internal_port = int(os.environ.get("PORT", "8080"))
+
+        # اگه TCP Proxy فعاله، از دامین و پورت خارجی استفاده کن
+        if tcp_domain and tcp_port:
+            s["server_ip"] = tcp_domain
+            s["port"] = int(tcp_port)
+            self.save()
+            add_log("tcp_proxy_detected", f"{tcp_domain}:{tcp_port}")
+
+        # پورت داخلی که MTProxy روش گوش می‌ده
+        proxy_port = internal_port
+
+        # ============================================
+        # ساخت فایل کانفیگ
+        # ============================================
+        with open(CONFIG_FILE, "w") as f:
+            f.write(f"proxy_for 0.0.0.0:{proxy_port};\n")
+
+        with open(SECRET_FILE, "w") as f:
+            f.write(s["secret"] + "\n")
+
+        # ============================================
+        # دستور MTProxy
+        # ============================================
         cmd = [
             "mtproto-proxy",
-            "-p", str(s["port"]),
+            "-p", str(proxy_port),
             "-H", "443",
             "-S", s["secret"],
-            "--aes-pwd", "/app/data/proxy-secret",
+            "--aes-pwd", str(SECRET_FILE),
             "--http-stats",
             "-M", "1",
-            "/app/data/mtproxy-config.conf"
+            str(CONFIG_FILE)
         ]
 
         try:
-            # ساخت فایل کانفیگ خالی (MTProxy نیاز داره)
-            Path("/app/data/mtproxy-config.conf").touch()
-            Path("/app/data/proxy-secret").touch()
-
             self.process = subprocess.Popen(
                 cmd,
                 stdout=subprocess.PIPE,
@@ -120,10 +151,10 @@ class MTProtoManager:
                 self.process = None
                 return False, f"MTProxy failed: {err[:300]}"
 
-            add_log("proxy_started", f"پورت {s['port']}")
+            add_log("proxy_started", f"پورت {proxy_port}")
             return True, "started"
         except FileNotFoundError:
-            return False, "mtproto-proxy نصب نیست — Dockerfile رو چک کن"
+            return False, "mtproto-proxy نصب نیست"
         except Exception as e:
             return False, str(e)
 
@@ -147,6 +178,9 @@ class MTProtoManager:
     def is_running(self):
         return self.process is not None and self.process.poll() is None
 
+    # ============================================
+    # Links
+    # ============================================
     def build_link(self, secret=None):
         s = self.db["settings"]
         sec = secret or s["secret"]
@@ -157,6 +191,9 @@ class MTProtoManager:
         sec = secret or s["secret"]
         return f"https://t.me/proxy?server={s['server_ip']}&port={s['port']}&secret={sec}"
 
+    # ============================================
+    # Users
+    # ============================================
     def list_users(self):
         self.reload()
         return self.db["users"]
@@ -197,6 +234,13 @@ class MTProtoManager:
                 return u
         return None
 
+    def get_user_by_secret(self, secret):
+        self.reload()
+        for u in self.db["users"]:
+            if u["secret"] == secret:
+                return u
+        return None
+
     def update_user(self, user_id, data):
         self.reload()
         for u in self.db["users"]:
@@ -214,6 +258,9 @@ class MTProtoManager:
             created.append(self.create_user(f"{prefix}_{i+1}", expire_days))
         return created
 
+    # ============================================
+    # Stats
+    # ============================================
     def get_stats(self):
         self.reload()
         users = self.db["users"]
@@ -225,4 +272,18 @@ class MTProtoManager:
         }
 
 
+# ============================================
+# Singleton
+# ============================================
 mtproto = MTProtoManager()
+
+
+# ============================================
+# Test
+# ============================================
+if __name__ == "__main__":
+    print("🔥 APEX MTProto Manager")
+    ok, msg = mtproto.start_proxy()
+    print(f"Start: {msg}")
+    if ok:
+        print(f"Link: {mtproto.build_link()}")
