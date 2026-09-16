@@ -3,21 +3,19 @@ FROM python:3.12-slim
 WORKDIR /app
 
 RUN apt-get update && apt-get install -y --no-install-recommends \
-    curl ca-certificates tar gzip \
+    curl ca-certificates build-essential git libssl-dev zlib1g-dev \
     && rm -rf /var/lib/apt/lists/*
 
-# دانلود و استخراج mtg
-RUN curl -L https://github.com/9seconds/mtg/releases/download/v2.2.8/mtg-2.2.8-linux-amd64.tar.gz \
-    -o /tmp/mtg.tar.gz \
-    && mkdir -p /tmp/mtg-extract \
-    && tar -xzf /tmp/mtg.tar.gz -C /tmp/mtg-extract \
-    && ls -la /tmp/mtg-extract/ \
-    && find /tmp/mtg-extract -type f -name "mtg*" -exec mv {} /usr/local/bin/mtg \; \
-    && chmod +x /usr/local/bin/mtg \
-    && rm -rf /tmp/mtg.tar.gz /tmp/mtg-extract
+# دانلود و ساخت MTProxy رسمی از سورس
+RUN git clone https://github.com/TelegramMessenger/MTProxy.git /tmp/mtproxy \
+    && cd /tmp/mtproxy \
+    && make \
+    && cp objs/bin/mtproto-proxy /usr/local/bin/mtproto-proxy \
+    && chmod +x /usr/local/bin/mtproto-proxy \
+    && rm -rf /tmp/mtproxy
 
 # تست نصب
-RUN /usr/local/bin/mtg --version
+RUN mtproto-proxy --help 2>&1 | head -1 || true
 
 COPY requirements.txt .
 RUN pip install --no-cache-dir -r requirements.txt
