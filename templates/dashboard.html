@@ -3,30 +3,25 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Apex Panel · Dashboard</title>
+<title>Apex MTProto · Dashboard</title>
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/rastikerdar/vazirmatn@v33.003/Vazirmatn-font-face.css">
 <style>
-:root { --bg:#0b0e14; --card:#141821; --card2:#1a1f2e; --border:#232a36; --text:#e6edf3; --muted:#7d8590; --accent:#2f81f7; --accent-hover:#4a9eff; --success:#3fb950; --danger:#f85149; --warning:#d29922; --shadow:0 8px 32px rgba(0,0,0,0.5); }
-[data-theme="light"] { --bg:#f6f8fa; --card:#fff; --card2:#f9fafb; --border:#d0d7de; --text:#1f2328; --muted:#656d76; --shadow:0 8px 32px rgba(0,0,0,0.1); }
+:root { --bg:#0b0e14; --card:#141821; --border:#232a36; --text:#e6edf3; --muted:#7d8590; --accent:#2f81f7; --accent-hover:#4a9eff; --success:#3fb950; --danger:#f85149; --warning:#d29922; --shadow:0 8px 32px rgba(0,0,0,0.5); }
+[data-theme="light"] { --bg:#f6f8fa; --card:#fff; --border:#d0d7de; --text:#1f2328; --muted:#656d76; --shadow:0 8px 32px rgba(0,0,0,0.1); }
 * { margin:0; padding:0; box-sizing:border-box; font-family:'Vazirmatn',sans-serif; }
-body { min-height:100vh; background:var(--bg); color:var(--text); position:relative; }
+body { min-height:100vh; background:var(--bg); color:var(--text); padding:24px; }
 body::before { content:''; position:fixed; inset:0; background:radial-gradient(circle at 10% 10%,rgba(47,129,247,0.08),transparent 40%),radial-gradient(circle at 90% 90%,rgba(88,166,255,0.05),transparent 40%); pointer-events:none; z-index:0; }
-.container { position:relative; z-index:1; max-width:1500px; margin:0 auto; padding:24px; }
+.container { position:relative; z-index:1; max-width:1200px; margin:0 auto; }
 .header { display:flex; justify-content:space-between; align-items:center; background:var(--card); border:1px solid var(--border); border-radius:14px; padding:18px 26px; margin-bottom:20px; box-shadow:var(--shadow); }
 .brand { display:flex; align-items:center; gap:14px; }
-.brand-logo { width:44px; height:44px; border-radius:12px; box-shadow:0 0 20px rgba(47,129,247,0.5); }
-.brand-name { font-size:19px; font-weight:900; letter-spacing:1px; background:linear-gradient(135deg,#2f81f7,#58a6ff,#79c0ff); -webkit-background-clip:text; -webkit-text-fill-color:transparent; }
+.brand-logo { width:44px; height:44px; border-radius:12px; }
+.brand-name { font-size:19px; font-weight:900; background:linear-gradient(135deg,#2f81f7,#79c0ff); -webkit-background-clip:text; -webkit-text-fill-color:transparent; }
 .brand-sub { font-size:10px; color:var(--muted); letter-spacing:2px; margin-top:2px; }
 .actions { display:flex; gap:8px; align-items:center; }
 .icon-btn { width:38px; height:38px; background:var(--bg); border:1px solid var(--border); border-radius:10px; display:flex; align-items:center; justify-content:center; cursor:pointer; color:var(--muted); font-size:16px; transition:all 0.2s; }
-.icon-btn:hover { border-color:var(--accent); color:var(--accent); transform:translateY(-2px); }
-.logout { color:var(--danger); text-decoration:none; font-weight:700; font-size:13px; padding:10px 18px; border-radius:10px; background:rgba(248,81,73,0.1); border:1px solid rgba(248,81,73,0.2); transition:all 0.2s; }
-.logout:hover { background:rgba(248,81,73,0.2); }
-.tabs { display:flex; gap:8px; background:var(--card); border:1px solid var(--border); border-radius:14px; padding:8px; margin-bottom:20px; overflow-x:auto; box-shadow:var(--shadow); }
-.tab { padding:10px 18px; border-radius:10px; background:transparent; border:none; color:var(--muted); font-family:inherit; font-size:13px; font-weight:700; cursor:pointer; transition:all 0.2s; white-space:nowrap; }
-.tab:hover { color:var(--text); background:var(--bg); }
-.tab.active { background:var(--accent); color:#fff; box-shadow:0 4px 12px rgba(47,129,247,0.4); }
-.stats { display:grid; grid-template-columns:repeat(auto-fit,minmax(170px,1fr)); gap:14px; margin-bottom:20px; }
+.icon-btn:hover { border-color:var(--accent); color:var(--accent); }
+.logout { color:var(--danger); text-decoration:none; font-weight:700; font-size:13px; padding:10px 18px; border-radius:10px; background:rgba(248,81,73,0.1); border:1px solid rgba(248,81,73,0.2); }
+.stats { display:grid; grid-template-columns:repeat(auto-fit,minmax(180px,1fr)); gap:14px; margin-bottom:20px; }
 .stat { background:var(--card); border:1px solid var(--border); border-radius:14px; padding:20px; box-shadow:var(--shadow); position:relative; overflow:hidden; }
 .stat::before { content:''; position:absolute; top:0; left:0; right:0; height:3px; background:linear-gradient(90deg,transparent,var(--accent),transparent); animation:scan 3s linear infinite; }
 @keyframes scan { 0% { transform:translateX(-100%); } 100% { transform:translateX(100%); } }
@@ -34,50 +29,36 @@ body::before { content:''; position:fixed; inset:0; background:radial-gradient(c
 .stat-value { font-size:26px; font-weight:900; background:linear-gradient(135deg,#2f81f7,#79c0ff); -webkit-background-clip:text; -webkit-text-fill-color:transparent; }
 .stat.green .stat-value { background:linear-gradient(135deg,#3fb950,#7ee787); -webkit-background-clip:text; }
 .stat.red .stat-value { background:linear-gradient(135deg,#f85149,#ff7b72); -webkit-background-clip:text; }
-.stat.yellow .stat-value { background:linear-gradient(135deg,#d29922,#e3b341); -webkit-background-clip:text; }
 .panel { background:var(--card); border:1px solid var(--border); border-radius:14px; padding:24px; margin-bottom:20px; box-shadow:var(--shadow); }
 .section-title { font-size:12px; color:var(--muted); letter-spacing:2px; text-transform:uppercase; margin-bottom:16px; font-weight:700; }
 .section-title::before { content:'// '; color:var(--accent); }
 .form-row { display:flex; gap:12px; flex-wrap:wrap; margin-bottom:12px; }
-.input, select { flex:1; min-width:140px; padding:13px 16px; background:var(--bg); border:1px solid var(--border); border-radius:10px; color:var(--text); font-size:14px; font-family:inherit; outline:none; transition:all 0.2s; }
-.input:focus, select:focus { border-color:var(--accent); box-shadow:0 0 0 4px rgba(47,129,247,0.15); }
+.input { flex:1; min-width:140px; padding:13px 16px; background:var(--bg); border:1px solid var(--border); border-radius:10px; color:var(--text); font-size:14px; font-family:inherit; outline:none; transition:all 0.2s; }
+.input:focus { border-color:var(--accent); box-shadow:0 0 0 4px rgba(47,129,247,0.15); }
 .btn { padding:13px 24px; background:var(--accent); border:none; border-radius:10px; color:#fff; font-size:14px; font-weight:700; font-family:inherit; cursor:pointer; transition:all 0.2s; }
 .btn:hover { background:var(--accent-hover); transform:translateY(-2px); box-shadow:0 8px 20px rgba(47,129,247,0.4); }
 .btn-danger { background:var(--danger); }
 .btn-success { background:var(--success); }
 .btn-warning { background:var(--warning); }
 .btn-sm { padding:8px 16px; font-size:12px; }
-.table-wrap { overflow-x:auto; }
 table { width:100%; border-collapse:collapse; }
 th, td { padding:13px 14px; text-align:right; border-bottom:1px solid var(--border); font-size:13px; }
 th { color:var(--muted); font-size:10px; letter-spacing:2px; text-transform:uppercase; font-weight:700; }
 tr:hover td { background:rgba(47,129,247,0.04); }
-.badge { display:inline-block; padding:4px 10px; border-radius:999px; font-size:10px; font-weight:700; letter-spacing:1px; }
+.badge { display:inline-block; padding:4px 10px; border-radius:999px; font-size:10px; font-weight:700; }
 .badge-active { background:rgba(63,185,80,0.15); color:var(--success); }
 .badge-disabled { background:rgba(248,81,73,0.15); color:var(--danger); }
-.badge-expired { background:rgba(210,153,34,0.15); color:var(--warning); }
 .act { cursor:pointer; font-size:15px; margin-right:8px; transition:transform 0.2s; display:inline-block; }
 .act:hover { transform:scale(1.3); }
-.act.copy { color:var(--accent); } .act.del { color:var(--danger); } .act.reset { color:var(--warning); } .act.edit { color:var(--success); }
+.act.copy { color:var(--accent); } .act.del { color:var(--danger); }
 .mono { font-family:monospace; font-size:11px; opacity:0.7; }
-.empty { text-align:center; color:var(--muted); padding:40px; font-size:13px; }
-.progress { width:100%; height:6px; background:var(--bg); border-radius:999px; overflow:hidden; margin-top:6px; }
-.progress-bar { height:100%; background:linear-gradient(90deg,var(--accent),var(--accent-hover)); border-radius:999px; transition:width 0.4s; }
-.progress-bar.warn { background:linear-gradient(90deg,var(--warning),#e3b341); }
-.progress-bar.danger { background:linear-gradient(90deg,var(--danger),#ff7b72); }
-.log-item { display:flex; justify-content:space-between; align-items:center; padding:12px 16px; background:var(--bg); border-radius:10px; margin-bottom:8px; font-size:12px; border-right:3px solid var(--accent); }
-.log-item.danger { border-right-color:var(--danger); }
-.log-item.warning { border-right-color:var(--warning); }
-.log-time { color:var(--muted); font-size:11px; font-family:monospace; }
-.log-action { font-weight:700; color:var(--accent); margin:0 8px; }
-.log-detail { color:var(--muted); flex:1; }
-.toast { position:fixed; bottom:30px; left:50%; transform:translateX(-50%) translateY(100px); background:var(--card); border:1px solid var(--border); border-radius:12px; padding:14px 24px; box-shadow:var(--shadow); z-index:9999; transition:transform 0.4s cubic-bezier(0.16,1,0.3,1); font-weight:600; font-size:14px; }
+.empty { text-align:center; color:var(--muted); padding:40px; }
+.toast { position:fixed; bottom:30px; left:50%; transform:translateX(-50%) translateY(100px); background:var(--card); border:1px solid var(--border); border-radius:12px; padding:14px 24px; box-shadow:var(--shadow); z-index:9999; transition:transform 0.4s; font-weight:600; }
 .toast.show { transform:translateX(-50%) translateY(0); }
 .toast.success { border-color:var(--success); color:var(--success); }
 .toast.error { border-color:var(--danger); color:var(--danger); }
-.gauge { position:relative; width:100%; height:8px; background:var(--bg); border-radius:999px; overflow:hidden; }
-.gauge-fill { height:100%; border-radius:999px; transition:width 0.4s; }
-@media (max-width:640px) { .header { flex-direction:column; gap:16px; align-items:stretch; } .form-row { flex-direction:column; } .btn { width:100%; } th, td { padding:10px 8px; font-size:11px; } .stat-value { font-size:20px; } }
+.link-box { background:var(--bg); border:1px solid var(--border); border-radius:10px; padding:14px; font-family:monospace; font-size:12px; word-break:break-all; margin-top:12px; color:var(--accent); }
+@media (max-width:640px) { .header { flex-direction:column; gap:16px; } .form-row { flex-direction:column; } .btn { width:100%; } }
 </style>
 </head>
 <body>
@@ -87,162 +68,90 @@ tr:hover td { background:rgba(47,129,247,0.04); }
     <div class="brand">
       <img class="brand-logo" src="https://ui-avatars.com/api/?name=AP&background=2f81f7&color=fff&size=88&bold=true&font-size=0.5">
       <div>
-        <div class="brand-name">APEX PANEL</div>
-        <div class="brand-sub">FULL CONTROL SYSTEM</div>
+        <div class="brand-name">APEX MTPROTO</div>
+        <div class="brand-sub">TELEGRAM PROXY PANEL</div>
       </div>
     </div>
     <div class="actions">
       <button class="icon-btn" id="themeToggle">🌙</button>
-      <button class="icon-btn" onclick="refreshAll()" title="Refresh">🔄</button>
-      <a href="/status" target="_blank" class="icon-btn" title="Status Page" style="text-decoration:none">🌐</a>
+      <button class="icon-btn" onclick="refresh()">🔄</button>
       <a href="/logout" class="logout">خروج</a>
     </div>
   </div>
 
-  <div class="tabs">
-    <button class="tab active" data-tab="overview" onclick="showTab('overview')">🏠 نمای کلی</button>
-    <button class="tab" data-tab="system" onclick="showTab('system')">💻 سیستم</button>
-    <button class="tab" data-tab="users" onclick="showTab('users')">👥 کاربران</button>
-    <button class="tab" data-tab="create" onclick="showTab('create')">➕ ساخت</button>
-    <button class="tab" data-tab="bulk" onclick="showTab('bulk')">⚡ انبوه</button>
-    <button class="tab" data-tab="traffic" onclick="showTab('traffic')">📊 ترافیک</button>
-    <button class="tab" data-tab="settings" onclick="showTab('settings')">⚙️ تنظیمات</button>
-    <button class="tab" data-tab="security" onclick="showTab('security')">🔒 امنیت</button>
-    <button class="tab" data-tab="logs" onclick="showTab('logs')">📋 لاگ‌ها</button>
-    <button class="tab" data-tab="tools" onclick="showTab('tools')">🛠 ابزارها</button>
+  <!-- آمار -->
+  <div class="stats">
+    <div class="stat"><div class="stat-label">کل کاربران</div><div class="stat-value" id="s_total">0</div></div>
+    <div class="stat green"><div class="stat-label">فعال</div><div class="stat-value" id="s_active">0</div></div>
+    <div class="stat"><div class="stat-label">اتصالات</div><div class="stat-value" id="s_conn">0</div></div>
+    <div class="stat" id="proxyStatusCard"><div class="stat-label">وضعیت پروکسی</div><div class="stat-value" id="s_proxy">—</div></div>
   </div>
 
-  <!-- OVERVIEW -->
-  <div id="tab-overview" class="tab-content">
-    <div class="stats">
-      <div class="stat"><div class="stat-label">کل کاربران</div><div class="stat-value" id="s_total">0</div></div>
-      <div class="stat green"><div class="stat-label">فعال</div><div class="stat-value" id="s_active">0</div></div>
-      <div class="stat yellow"><div class="stat-label">منقضی</div><div class="stat-value" id="s_expired">0</div></div>
-      <div class="stat red"><div class="stat-label">غیرفعال</div><div class="stat-value" id="s_disabled">0</div></div>
-    </div>
-    <div class="stats">
-      <div class="stat"><div class="stat-label">ترافیک کل</div><div class="stat-value" id="s_tt">0</div></div>
-      <div class="stat"><div class="stat-label">مصرف</div><div class="stat-value" id="s_ut">0</div></div>
-      <div class="stat green"><div class="stat-label">باقی</div><div class="stat-value" id="s_rt">0</div></div>
-      <div class="stat"><div class="stat-label">اتصالات</div><div class="stat-value" id="s_conn">0</div></div>
-    </div>
-    <div class="panel">
-      <div class="section-title">سیستم زنده</div>
-      <div class="stats" id="liveSystem"></div>
-    </div>
-    <div class="panel">
-      <div class="section-title">آخرین کاربران</div>
-      <div class="table-wrap"><table><thead><tr><th>نام</th><th>حجم</th><th>وضعیت</th><th>تاریخ</th></tr></thead><tbody id="recentUsers"></tbody></table></div>
-    </div>
+  <div class="stats">
+    <div class="stat"><div class="stat-label">CPU</div><div class="stat-value" id="s_cpu">0%</div></div>
+    <div class="stat"><div class="stat-label">RAM</div><div class="stat-value" id="s_ram">0%</div></div>
+    <div class="stat"><div class="stat-label">آپ‌تایم</div><div class="stat-value" style="font-size:16px" id="s_uptime">—</div></div>
+    <div class="stat"><div class="stat-label">پورت</div><div class="stat-value" style="font-size:16px" id="s_port">—</div></div>
   </div>
 
-  <!-- SYSTEM -->
-  <div id="tab-system" class="tab-content" style="display:none">
-    <div class="stats" id="sysStats"></div>
-    <div class="panel">
-      <div class="section-title">فرآیندها (Top CPU)</div>
-      <div class="table-wrap"><table><thead><tr><th>PID</th><th>نام</th><th>CPU %</th><th>RAM %</th></tr></thead><tbody id="procTable"></tbody></table></div>
+  <!-- کنترل پروکسی -->
+  <div class="panel">
+    <div class="section-title">کنترل پروکسی</div>
+    <div class="form-row">
+      <button class="btn btn-success" onclick="proxyControl('start')">▶️ روشن</button>
+      <button class="btn btn-danger" onclick="proxyControl('stop')">⏹ خاموش</button>
+      <button class="btn btn-warning" onclick="proxyControl('restart')">🔄 ری‌استارت</button>
+      <button class="btn" onclick="showLink()">🔗 لینک پروکسی</button>
     </div>
+    <div id="linkBox"></div>
   </div>
 
-  <!-- USERS -->
-  <div id="tab-users" class="tab-content" style="display:none">
-    <div class="panel">
-      <div class="section-title">مدیریت کاربران</div>
-      <div class="form-row">
-        <input class="input" id="searchInput" placeholder="🔍 جستجو" oninput="renderUsers()">
-        <select class="input" id="filterStatus" onchange="renderUsers()">
-          <option value="all">همه</option><option value="active">فعال</option><option value="disabled">غیرفعال</option><option value="expired">منقضی</option>
-        </select>
-        <button class="btn btn-sm" onclick="exportUsers()">📥 اکسپورت</button>
-      </div>
-      <div class="table-wrap"><table><thead><tr><th>نام</th><th>حجم</th><th>مصرف</th><th>UUID</th><th>وضعیت</th><th>انقضا</th><th>عملیات</th></tr></thead><tbody id="usersTable"></tbody></table></div>
-    </div>
-  </div>
-
-  <!-- CREATE -->
-  <div id="tab-create" class="tab-content" style="display:none">
-    <div class="panel">
-      <div class="section-title">ساخت کاربر</div>
-      <div class="form-row">
-        <input class="input" id="c_name" placeholder="نام">
-        <input class="input" type="number" id="c_size" placeholder="حجم GB">
-        <input class="input" type="number" id="c_expire" placeholder="انقضا روز">
-      </div>
+  <!-- ساخت کاربر -->
+  <div class="panel">
+    <div class="section-title">ساخت کاربر</div>
+    <div class="form-row">
+      <input class="input" id="c_name" placeholder="اسم کاربر">
+      <input class="input" type="number" id="c_expire" placeholder="انقضا (روز) — اختیاری">
       <button class="btn" onclick="createUser()">➕ ساخت</button>
     </div>
   </div>
 
-  <!-- BULK -->
-  <div id="tab-bulk" class="tab-content" style="display:none">
-    <div class="panel">
-      <div class="section-title">ساخت انبوه</div>
-      <div class="form-row">
-        <input class="input" id="b_prefix" placeholder="پیشوند" value="user">
-        <input class="input" type="number" id="b_count" placeholder="تعداد" value="10">
-        <input class="input" type="number" id="b_size" placeholder="حجم GB" value="10">
-      </div>
-      <button class="btn btn-success" onclick="bulkCreate()">⚡ ساخت انبوه</button>
+  <!-- ساخت انبوه -->
+  <div class="panel">
+    <div class="section-title">ساخت انبوه</div>
+    <div class="form-row">
+      <input class="input" id="b_prefix" placeholder="پیشوند" value="user">
+      <input class="input" type="number" id="b_count" placeholder="تعداد" value="10">
+      <input class="input" type="number" id="b_expire" placeholder="انقضا (روز)" value="30">
+      <button class="btn btn-success" onclick="bulkCreate()">⚡ ساخت</button>
     </div>
   </div>
 
-  <!-- TRAFFIC -->
-  <div id="tab-traffic" class="tab-content" style="display:none">
-    <div class="panel">
-      <div class="section-title">مصرف هر کاربر</div>
-      <div class="table-wrap"><table><thead><tr><th>نام</th><th>مصرف</th><th>حجم</th><th>درصد</th><th>اتصالات</th></tr></thead><tbody id="trafficTable"></tbody></table></div>
-    </div>
+  <!-- کاربران -->
+  <div class="panel">
+    <div class="section-title">کاربران</div>
+    <table>
+      <thead><tr><th>نام</th><th>سکرت</th><th>وضعیت</th><th>انقضا</th><th>عملیات</th></tr></thead>
+      <tbody id="usersTable"></tbody>
+    </table>
   </div>
 
-  <!-- SETTINGS -->
-  <div id="tab-settings" class="tab-content" style="display:none">
-    <div class="panel">
-      <div class="section-title">تنظیمات سرور</div>
-      <div class="form-row"><input class="input" id="st_panel_name" placeholder="اسم پنل"><input class="input" id="st_server_ip" placeholder="IP/دامنه"></div>
-      <div class="form-row"><input class="input" type="number" id="st_server_port" placeholder="پورت"><input class="input" id="st_sub_path" placeholder="مسیر"></div>
-      <div class="form-row"><input class="input" id="st_sni" placeholder="SNI"><input class="input" id="st_fp" placeholder="FP"></div>
-      <div class="form-row"><input class="input" id="st_alpn" placeholder="ALPN"></div>
-      <div class="form-row"><input class="input" id="st_sub_domain" placeholder="دامنه sub"><input class="input" id="st_status_domain" placeholder="دامنه status"></div>
-      <div class="form-row"><input class="input" id="st_panel_domain" placeholder="دامنه panel"></div>
-      <div class="form-row">
-        <label><input type="checkbox" id="st_ip_lock"> قفل IP فعال</label>
-        <input class="input" type="number" id="st_max_ips" placeholder="حداکثر IP">
-      </div>
-      <button class="btn" onclick="saveSettings()">💾 ذخیره</button>
+  <!-- تنظیمات -->
+  <div class="panel">
+    <div class="section-title">تنظیمات</div>
+    <div class="form-row">
+      <input class="input" id="st_server_ip" placeholder="دامنه سرور (مثلاً your-app.up.railway.app)">
+      <input class="input" type="number" id="st_port" placeholder="پورت">
     </div>
-  </div>
-
-  <!-- SECURITY -->
-  <div id="tab-security" class="tab-content" style="display:none">
-    <div class="panel">
-      <div class="section-title">تغییر رمز</div>
-      <div class="form-row"><input class="input" type="password" id="old_pass" placeholder="رمز قدیمی"><input class="input" type="password" id="new_pass" placeholder="رمز جدید"></div>
-      <button class="btn" onclick="changePassword()">🔒 تغییر</button>
+    <div class="form-row">
+      <input class="input" id="st_proxy_tag" placeholder="تگ پروکسی (APEX)">
+      <input class="input" id="st_secret" placeholder="سکرت اصلی">
     </div>
-  </div>
-
-  <!-- LOGS -->
-  <div id="tab-logs" class="tab-content" style="display:none">
-    <div class="panel">
-      <div class="section-title">لاگ‌ها</div>
-      <div class="form-row"><button class="btn btn-danger btn-sm" onclick="clearLogs()">🗑 پاک کردن</button></div>
-      <div id="logsList"></div>
-    </div>
-  </div>
-
-  <!-- TOOLS -->
-  <div id="tab-tools" class="tab-content" style="display:none">
-    <div class="panel">
-      <div class="section-title">ابزارها</div>
-      <div class="form-row">
-        <button class="btn" onclick="downloadBackup()">📥 بکاپ</button>
-        <button class="btn" onclick="window.open('/status','_blank')">🌐 Status Page</button>
-        <button class="btn btn-danger" onclick="clearAllUsers()">🗑 حذف همه</button>
-      </div>
-    </div>
+    <button class="btn" onclick="saveSettings()">💾 ذخیره</button>
   </div>
 
 </div>
+
 <div class="toast" id="toast"></div>
 
 <script>
@@ -251,21 +160,9 @@ function setTheme(t) { document.documentElement.dataset.theme = t; themeToggle.t
 themeToggle.addEventListener('click', () => setTheme(document.documentElement.dataset.theme === 'dark' ? 'light' : 'dark'));
 setTheme(localStorage.getItem('apex_theme') || 'dark');
 
-function showTab(n) {
-  document.querySelectorAll('.tab-content').forEach(t => t.style.display = 'none');
-  document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
-  document.getElementById('tab-' + n).style.display = 'block';
-  document.querySelector(`.tab[data-tab="${n}"]`).classList.add('active');
-  if (n === 'overview') { loadStats(); loadRecentUsers(); loadLiveSystem(); }
-  if (n === 'system') loadSystem();
-  if (n === 'users') loadUsers();
-  if (n === 'traffic') loadTraffic();
-  if (n === 'settings') loadSettings();
-  if (n === 'logs') loadLogs();
-}
-
 function toast(m, type = 'success') {
-  const t = document.getElementById('toast'); t.textContent = m; t.className = 'toast show ' + type;
+  const t = document.getElementById('toast');
+  t.textContent = m; t.className = 'toast show ' + type;
   setTimeout(() => t.className = 'toast ' + type, 2500);
 }
 
@@ -275,207 +172,117 @@ async function loadStats() {
   const s = await (await fetch('/api/stats')).json();
   document.getElementById('s_total').textContent = s.total_users;
   document.getElementById('s_active').textContent = s.active_users;
-  document.getElementById('s_expired').textContent = s.expired_users;
-  document.getElementById('s_disabled').textContent = s.disabled_users;
-  document.getElementById('s_tt').innerHTML = s.total_traffic + '<span style="font-size:12px">GB</span>';
-  document.getElementById('s_ut').innerHTML = s.used_traffic + '<span style="font-size:12px">GB</span>';
-  document.getElementById('s_rt').innerHTML = s.remaining_traffic + '<span style="font-size:12px">GB</span>';
-  document.getElementById('s_conn').textContent = s.total_connections;
+  document.getElementById('s_conn').textContent = s.connections;
+  document.getElementById('s_cpu').textContent = (s.cpu || 0) + '%';
+  document.getElementById('s_ram').textContent = (s.ram || 0) + '%';
+  document.getElementById('s_uptime').textContent = s.uptime || '—';
+
+  const statusEl = document.getElementById('s_proxy');
+  statusEl.textContent = s.proxy_running ? 'آنلاین' : 'آفلاین';
+  statusEl.style.color = s.proxy_running ? 'var(--success)' : 'var(--danger)';
 }
 
-async function loadLiveSystem() {
-  const sys = await (await fetch('/api/system')).json();
-  const el = document.getElementById('liveSystem');
-  if (sys.error) { el.innerHTML = '<div class="empty">خطا</div>'; return; }
-  el.innerHTML = `
-    <div class="stat"><div class="stat-label">CPU</div><div class="stat-value">${sys.cpu.percent}<span style="font-size:12px">%</span></div><div class="progress"><div class="progress-bar ${sys.cpu.percent>80?'danger':sys.cpu.percent>60?'warn':''}" style="width:${sys.cpu.percent}%"></div></div></div>
-    <div class="stat"><div class="stat-label">RAM</div><div class="stat-value">${sys.ram.percent}<span style="font-size:12px">%</span></div><div class="progress"><div class="progress-bar ${sys.ram.percent>80?'danger':sys.ram.percent>60?'warn':''}" style="width:${sys.ram.percent}%"></div></div></div>
-    <div class="stat"><div class="stat-label">Disk</div><div class="stat-value">${sys.disk.percent}<span style="font-size:12px">%</span></div><div class="progress"><div class="progress-bar ${sys.disk.percent>80?'danger':''}" style="width:${sys.disk.percent}%"></div></div></div>
-    <div class="stat"><div class="stat-label">Uptime</div><div class="stat-value" style="font-size:16px">${sys.panel.uptime}</div></div>
-  `;
-}
-
-async function loadSystem() {
-  const sys = await (await fetch('/api/system')).json();
-  const el = document.getElementById('sysStats');
-  el.innerHTML = `
-    <div class="stat"><div class="stat-label">CPU</div><div class="stat-value">${sys.cpu.percent}%</div><div style="font-size:11px;color:var(--muted);margin-top:6px">${sys.cpu.count} هسته · Load: ${sys.cpu.load_avg.join(' / ')}</div></div>
-    <div class="stat"><div class="stat-label">RAM</div><div class="stat-value">${sys.ram.used} / ${sys.ram.total} GB</div><div class="progress"><div class="progress-bar" style="width:${sys.ram.percent}%"></div></div></div>
-    <div class="stat"><div class="stat-label">Disk</div><div class="stat-value">${sys.disk.used} / ${sys.disk.total} GB</div><div class="progress"><div class="progress-bar" style="width:${sys.disk.percent}%"></div></div></div>
-    <div class="stat"><div class="stat-label">Network Sent</div><div class="stat-value" style="font-size:16px">${sys.network.sent_human}</div></div>
-    <div class="stat"><div class="stat-label">Network Recv</div><div class="stat-value" style="font-size:16px">${sys.network.recv_human}</div></div>
-    <div class="stat"><div class="stat-label">OS</div><div class="stat-value" style="font-size:14px">${sys.system.os}</div></div>
-    <div class="stat"><div class="stat-label">Hostname</div><div class="stat-value" style="font-size:14px">${sys.system.hostname}</div></div>
-    <div class="stat"><div class="stat-label">Python</div><div class="stat-value" style="font-size:14px">${sys.system.python}</div></div>
-  `;
-
-  const procs = await (await fetch('/api/system/processes')).json();
-  const tbody = document.getElementById('procTable');
-  tbody.innerHTML = (Array.isArray(procs) ? procs : []).map(p => `
-    <tr><td class="mono">${p.pid}</td><td>${p.name}</td><td>${p.cpu}%</td><td>${p.mem}%</td></tr>
-  `).join('') || '<tr><td colspan="4" class="empty">—</td></tr>';
-}
-
-async function loadRecentUsers() {
-  const users = await (await fetch('/api/users')).json();
-  const tbody = document.getElementById('recentUsers');
-  const recent = users.slice(-5).reverse();
-  tbody.innerHTML = recent.length ? recent.map(u => `
-    <tr><td>${u.name}</td><td>${u.size} GB</td><td><span class="badge badge-${u.status==='active'?'active':'disabled'}">${u.status}</span></td><td class="mono">${new Date(u.created_at).toLocaleDateString('fa-IR')}</td></tr>
-  `).join('') : '<tr><td colspan="4" class="empty">—</td></tr>';
+async function loadLink() {
+  const d = await (await fetch('/api/proxy/link')).json();
+  document.getElementById('s_port').textContent = d.port;
+  document.getElementById('st_server_ip').value = d.server;
+  document.getElementById('st_port').value = d.port;
 }
 
 async function loadUsers() {
   allUsers = await (await fetch('/api/users')).json();
-  renderUsers();
-}
-
-function renderUsers() {
-  const q = (document.getElementById('searchInput')?.value || '').toLowerCase();
-  const f = document.getElementById('filterStatus')?.value || 'all';
   const tbody = document.getElementById('usersTable');
-  let filtered = allUsers.filter(u => u.name.toLowerCase().includes(q));
-  if (f !== 'all') filtered = filtered.filter(u => u.status === f);
-  if (!filtered.length) { tbody.innerHTML = '<tr><td colspan="7" class="empty">—</td></tr>'; return; }
-  tbody.innerHTML = filtered.map(u => {
-    const pct = u.size > 0 ? Math.min(100, (u.used / u.size) * 100) : 0;
-    const cls = pct > 90 ? 'danger' : pct > 70 ? 'warn' : '';
-    return `<tr>
+  if (!allUsers.length) {
+    tbody.innerHTML = '<tr><td colspan="5" class="empty">هنوز کاربری نساختی</td></tr>';
+    return;
+  }
+  tbody.innerHTML = allUsers.map(u => `
+    <tr>
       <td>${u.name}</td>
-      <td>${u.size} GB</td>
-      <td>${u.used} GB<div class="progress"><div class="progress-bar ${cls}" style="width:${pct}%"></div></div></td>
-      <td class="mono">${u.uuid.slice(0,10)}…</td>
-      <td><span class="badge badge-${u.status==='active'?'active':'disabled'}">${u.status}</span></td>
+      <td class="mono">${u.secret.slice(0, 12)}…</td>
+      <td><span class="badge badge-${u.status === 'active' ? 'active' : 'disabled'}">${u.status === 'active' ? 'فعال' : 'غیرفعال'}</span></td>
       <td class="mono">${u.expire_at ? new Date(u.expire_at).toLocaleDateString('fa-IR') : '—'}</td>
       <td>
-        <span class="act copy" onclick="copyLink('${u.uuid}')">📋</span>
-        <span class="act copy" onclick="copySub('${u.uuid}')">🔗</span>
-        <span class="act reset" onclick="resetUsage('${u.id}')">🔄</span>
-        <span class="act edit" onclick="toggleStatus('${u.id}','${u.status}')">${u.status==='active'?'⏸':'▶'}</span>
-        <span class="act del" onclick="delUser('${u.id}')">✕</span>
+        <span class="act copy" onclick="copyLink('${u.link}')" title="کپی لینک">📋</span>
+        <span class="act del" onclick="delUser('${u.id}')" title="حذف">✕</span>
       </td>
-    </tr>`;
-  }).join('');
-}
-
-async function loadTraffic() {
-  const stats = await (await fetch('/api/stats/users')).json();
-  const tbody = document.getElementById('trafficTable');
-  stats.sort((a, b) => b.used - a.used);
-  tbody.innerHTML = stats.length ? stats.map(s => `
-    <tr><td>${s.name}</td><td>${s.used} GB</td><td>${s.size} GB</td><td>${s.percent}%</td><td>${s.connections}</td></tr>
-  `).join('') : '<tr><td colspan="5" class="empty">—</td></tr>';
+    </tr>
+  `).join('');
 }
 
 async function createUser() {
   const name = document.getElementById('c_name').value.trim();
-  const size = parseInt(document.getElementById('c_size').value);
   const exp = parseInt(document.getElementById('c_expire').value) || 0;
-  if (!name || !size) return toast('نام و حجم', 'error');
-  const r = await fetch('/api/users', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ name, size, expire_days: exp }) });
-  if (r.ok) { toast('✅ ساخته شد'); document.getElementById('c_name').value=''; document.getElementById('c_size').value=''; document.getElementById('c_expire').value=''; loadUsers(); loadStats(); }
-  else toast((await r.json()).error || 'خطا', 'error');
+  if (!name) return toast('اسم بده', 'error');
+  const r = await fetch('/api/users', { method: 'POST', headers: {'Content-Type':'application/json'}, body: JSON.stringify({name, expire_days: exp}) });
+  if (r.ok) { toast('✅ ساخته شد'); document.getElementById('c_name').value=''; loadUsers(); loadStats(); }
+  else toast('خطا', 'error');
 }
 
 async function bulkCreate() {
   const prefix = document.getElementById('b_prefix').value || 'user';
   const count = parseInt(document.getElementById('b_count').value) || 10;
-  const size = parseInt(document.getElementById('b_size').value) || 10;
+  const exp = parseInt(document.getElementById('b_expire').value) || 0;
   if (!confirm(`${count} کاربر ساخته شود؟`)) return;
-  await fetch('/api/users/bulk', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ prefix, count, size }) });
+  await fetch('/api/users/bulk', { method: 'POST', headers: {'Content-Type':'application/json'}, body: JSON.stringify({prefix, count, expire_days: exp}) });
   toast(`✅ ${count} ساخته شد`); loadUsers(); loadStats();
 }
 
-async function delUser(id) { if (!confirm('حذف؟')) return; await fetch('/api/users/'+id, { method: 'DELETE' }); toast('🗑 حذف شد'); loadUsers(); loadStats(); }
-async function resetUsage(id) { await fetch(`/api/users/${id}/reset`, { method: 'POST' }); toast('🔄 ریست شد'); loadUsers(); }
-async function toggleStatus(id, st) {
-  await fetch('/api/users/'+id, { method: 'PATCH', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ status: st==='active'?'disabled':'active' }) });
-  toast('✅ تغییر کرد'); loadUsers();
+async function delUser(id) {
+  if (!confirm('حذف؟')) return;
+  await fetch('/api/users/' + id, { method: 'DELETE' });
+  toast('🗑 حذف شد'); loadUsers(); loadStats();
 }
 
-function copyLink(uuid) {
-  const l = `vless://${uuid}@servconfmmd.ir:443?path=%2Fvl-ws&security=tls&alpn=http%2F1.1&encryption=none&insecure=0&host=servconfmmd.ir&fp=chrome&type=ws&allowInsecure=0&sni=servconfmmd.ir#APEX-VPN`;
-  navigator.clipboard.writeText(l).then(() => toast('📋 لینک کپی'));
-}
-function copySub(uuid) {
-  navigator.clipboard.writeText(`https://sub.apex.ir/sub/${uuid}`).then(() => toast('🔗 sub کپی'));
+async function proxyControl(action) {
+  const r = await fetch('/api/proxy/' + action, { method: 'POST' });
+  const d = await r.json();
+  toast(d.ok ? `✅ ${d.message}` : `❌ ${d.message}`, d.ok ? 'success' : 'error');
+  loadStats();
 }
 
-function exportUsers() {
-  const blob = new Blob([JSON.stringify(allUsers, null, 2)], { type: 'application/json' });
-  const a = document.createElement('a'); a.href = URL.createObjectURL(blob); a.download = 'apex-users-' + Date.now() + '.json'; a.click();
-  toast('📥 اکسپورت شد');
+async function showLink() {
+  const d = await (await fetch('/api/proxy/link')).json();
+  const box = document.getElementById('linkBox');
+  box.innerHTML = `
+    <div class="link-box" onclick="copyLink('${d.link}')" style="cursor:pointer">
+      <b>tg://</b> ${d.link}
+    </div>
+    <div class="link-box" onclick="copyLink('${d.https_link}')" style="cursor:pointer">
+      <b>https://</b> ${d.https_link}
+    </div>
+    <div style="margin-top:8px;color:var(--muted);font-size:12px">👆 کلیک کن تا کپی شه</div>
+  `;
+}
+
+function copyLink(text) {
+  navigator.clipboard.writeText(text).then(() => toast('📋 کپی شد'));
 }
 
 async function loadSettings() {
   const s = await (await fetch('/api/settings')).json();
-  ['panel_name','server_ip','server_port','sub_path','sni','fp','alpn','sub_domain','status_domain','panel_domain','max_ips_per_user'].forEach(k => {
-    const el = document.getElementById('st_' + k.replace('_per_user','').replace('panel_','panel_'));
-    if (el) el.value = s[k] || '';
-  });
-  document.getElementById('st_ip_lock').checked = s.ip_lock_enabled || false;
+  document.getElementById('st_server_ip').value = s.server_ip || '';
+  document.getElementById('st_port').value = s.port || '';
+  document.getElementById('st_proxy_tag').value = s.proxy_tag || '';
+  document.getElementById('st_secret').value = s.secret || '';
 }
 
 async function saveSettings() {
   const d = {
-    panel_name: document.getElementById('st_panel_name').value,
     server_ip: document.getElementById('st_server_ip').value,
-    server_port: parseInt(document.getElementById('st_server_port').value),
-    sub_path: document.getElementById('st_sub_path').value,
-    sni: document.getElementById('st_sni').value,
-    fp: document.getElementById('st_fp').value,
-    alpn: document.getElementById('st_alpn').value,
-    sub_domain: document.getElementById('st_sub_domain').value,
-    status_domain: document.getElementById('st_status_domain').value,
-    panel_domain: document.getElementById('st_panel_domain').value,
-    ip_lock_enabled: document.getElementById('st_ip_lock').checked,
-    max_ips_per_user: parseInt(document.getElementById('st_max_ips').value) || 1
+    port: parseInt(document.getElementById('st_port').value),
+    proxy_tag: document.getElementById('st_proxy_tag').value,
+    secret: document.getElementById('st_secret').value
   };
-  await fetch('/api/settings', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(d) });
+  await fetch('/api/settings', { method: 'POST', headers: {'Content-Type':'application/json'}, body: JSON.stringify(d) });
   toast('💾 ذخیره شد');
+  loadStats();
 }
 
-async function changePassword() {
-  const o = document.getElementById('old_pass').value, n = document.getElementById('new_pass').value;
-  const r = await fetch('/api/change-password', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ old_password: o, new_password: n }) });
-  if (r.ok) { toast('🔒 تغییر کرد'); document.getElementById('old_pass').value=''; document.getElementById('new_pass').value=''; }
-  else toast((await r.json()).error || 'خطا', 'error');
-}
+function refresh() { loadStats(); loadUsers(); loadLink(); toast('🔄 بروزرسانی'); }
 
-async function loadLogs() {
-  const logs = await (await fetch('/api/logs')).json();
-  const box = document.getElementById('logsList');
-  box.innerHTML = logs.length ? logs.slice(0, 80).map(l => `
-    <div class="log-item ${l.level==='danger'?'danger':l.level==='warning'?'warning':''}">
-      <span class="log-time">${new Date(l.time).toLocaleString('fa-IR')}</span>
-      <span class="log-action">${l.action}</span>
-      <span class="log-detail">${l.detail}</span>
-    </div>
-  `).join('') : '<div class="empty">—</div>';
-}
-
-async function clearLogs() { if (!confirm('پاک؟')) return; await fetch('/api/logs/clear', { method: 'POST' }); toast('🗑 پاک شد'); loadLogs(); }
-
-async function downloadBackup() {
-  const d = await (await fetch('/api/backup')).json();
-  const blob = new Blob([JSON.stringify(d, null, 2)], { type: 'application/json' });
-  const a = document.createElement('a'); a.href = URL.createObjectURL(blob); a.download = 'apex-backup-' + Date.now() + '.json'; a.click();
-  toast('📥 دانلود شد');
-}
-
-async function clearAllUsers() {
-  if (!confirm('همه حذف شوند؟')) return;
-  if (!confirm('مطمئنید؟')) return;
-  for (const u of allUsers) await fetch('/api/users/' + u.id, { method: 'DELETE' });
-  toast('🗑 همه حذف شدند'); loadUsers(); loadStats();
-}
-
-function refreshAll() { loadStats(); loadLiveSystem(); loadUsers(); toast('🔄 بروزرسانی'); }
-
-// Auto refresh system every 5 seconds
-setInterval(() => { if (document.getElementById('tab-overview').style.display !== 'none') loadLiveSystem(); }, 5000);
-
-loadStats(); loadRecentUsers(); loadLiveSystem(); loadUsers();
+loadStats(); loadUsers(); loadLink(); loadSettings();
+setInterval(loadStats, 5000);
 </script>
 </body>
 </html>
