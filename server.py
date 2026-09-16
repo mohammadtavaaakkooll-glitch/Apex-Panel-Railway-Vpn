@@ -1,5 +1,5 @@
 """
-APEX MTProto Proxy - Server Manager
+APEX MTProto Proxy - Server Manager (Official MTProxy)
 """
 import os
 import json
@@ -17,7 +17,7 @@ DATA_DIR.mkdir(exist_ok=True, parents=True)
 
 DB_FILE = DATA_DIR / "db.json"
 LOG_FILE = DATA_DIR / "logs.json"
-CONFIG_FILE = DATA_DIR / "mtproto.toml"  # ← TOML نه JSON
+CONFIG_FILE = DATA_DIR / "mtproxy.conf"
 
 
 def load_json(path, default):
@@ -62,7 +62,6 @@ class MTProtoManager:
             "secret": secrets.token_hex(16),
             "proxy_tag": "APEX",
             "max_connections": 10000,
-            "fake_tls_domain": "www.google.com"
         }
 
     def reload(self):
@@ -71,7 +70,6 @@ class MTProtoManager:
     def save(self):
         save_json(DB_FILE, self.db)
 
-    # ---------- Admin ----------
     def set_admin(self, username, password_hash):
         self.db["admin"] = {
             "username": username,
@@ -83,23 +81,7 @@ class MTProtoManager:
     def get_admin(self):
         return self.db.get("admin")
 
-    # ---------- MTProto Proxy ----------
-    def _write_toml_config(self):
-        """نوشتن کانفیگ به فرمت TOML (mtg فقط TOML می‌خونه)"""
-        s = self.db["settings"]
-        lines = [
-            f'secret = "{s["secret"]}"',
-            f'bind-to = "0.0.0.0:{s["port"]}"',
-            f'concurrency = {s.get("max_connections", 10000)}',
-            'domain-fronting-port = 443',
-            'prefer-ip = "prefer-ipv6"',
-            'tolerate-time-skewness = true',
-            'secure-mode = true',
-            'debug = false',
-        ]
-        with open(CONFIG_FILE, "w", encoding="utf-8") as f:
-            f.write("\n".join(lines) + "\n")
-
+    # ---------- MTProxy ----------
     def start_proxy(self):
         if self.process and self.process.poll() is None:
             return False, "already running"
@@ -107,11 +89,23 @@ class MTProtoManager:
         self.reload()
         s = self.db["settings"]
 
-        # نوشتن کانفیگ TOML
-        self._write_toml_config()
+        # MTProxy با خط فرمان اجرا می‌شه، نه فایل کانفیگ
+        cmd = [
+            "mtproto-proxy",
+            "-p", str(s["port"]),
+            "-H", "443",
+            "-S", s["secret"],
+            "--aes-pwd", "/app/data/proxy-secret",
+            "--http-stats",
+            "-M", "1",
+            "/app/data/mtproxy-config.conf"
+        ]
 
-        cmd = ["mtg", "run", str(CONFIG_FILE)]
         try:
+            # ساخت فایل کانفیگ خالی (MTProxy نیاز داره)
+            Path("/app/data/mtproxy-config.conf").touch()
+            Path("/app/data/proxy-secret").touch()
+
             self.process = subprocess.Popen(
                 cmd,
                 stdout=subprocess.PIPE,
@@ -124,10 +118,12 @@ class MTProtoManager:
             if self.process.poll() is not None:
                 err = self.process.stderr.read()
                 self.process = None
-                return False, f"mtg failed: {err[:300]}"
+                return False, f"MTProxy failed: {err[:300]}"
 
             add_log("proxy_started", f"پورت {s['port']}")
             return True, "started"
+        except FileNotFoundError:
+            return False, "mtproto-proxy نصب نیست — Dockerfile رو چک کن"
         except Exception as e:
             return False, str(e)
 
@@ -161,7 +157,6 @@ class MTProtoManager:
         sec = secret or s["secret"]
         return f"https://t.me/proxy?server={s['server_ip']}&port={s['port']}&secret={sec}"
 
-    # ---------- Users ----------
     def list_users(self):
         self.reload()
         return self.db["users"]
@@ -219,7 +214,6 @@ class MTProtoManager:
             created.append(self.create_user(f"{prefix}_{i+1}", expire_days))
         return created
 
-    # ---------- Stats ----------
     def get_stats(self):
         self.reload()
         users = self.db["users"]
