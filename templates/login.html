@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-<title>Apex Panel · Setup</title>
+<title>Apex Panel · Login</title>
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/rastikerdar/vazirmatn@v33.003/Vazirmatn-font-face.css">
 <style>
 :root {
@@ -14,237 +14,109 @@
   --muted: #7d8590;
   --accent: #2f81f7;
   --accent-hover: #4a9eff;
-  --success: #3fb950;
   --danger: #f85149;
+  --success: #3fb950;
   --shadow: 0 8px 32px rgba(0, 0, 0, 0.5);
 }
-
 [data-theme="light"] {
-  --bg: #f6f8fa;
-  --card: #ffffff;
-  --border: #d0d7de;
-  --text: #1f2328;
-  --muted: #656d76;
-  --shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+  --bg: #f6f8fa; --card: #fff; --border: #d0d7de;
+  --text: #1f2328; --muted: #656d76;
+  --shadow: 0 8px 32px rgba(0,0,0,0.1);
 }
-
-* {
-  margin: 0;
-  padding: 0;
-  box-sizing: border-box;
-  font-family: 'Vazirmatn', 'Segoe UI', Tahoma, sans-serif;
-}
-
+* { margin:0; padding:0; box-sizing:border-box; font-family:'Vazirmatn',sans-serif; }
 body {
-  min-height: 100vh;
-  background: var(--bg);
-  color: var(--text);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  padding: 20px;
-  position: relative;
-  overflow: hidden;
+  min-height:100vh; background:var(--bg); color:var(--text);
+  display:flex; align-items:center; justify-content:center; padding:20px;
+  position:relative; overflow:hidden;
 }
-
-/* ===== پس‌زمینه گرادیانت متحرک ===== */
 body::before {
-  content: '';
-  position: fixed;
-  inset: 0;
+  content:''; position:fixed; inset:0;
   background:
-    radial-gradient(circle at 20% 20%, rgba(47, 129, 247, 0.15), transparent 50%),
-    radial-gradient(circle at 80% 80%, rgba(88, 166, 255, 0.1), transparent 50%);
-  animation: bgPulse 15s ease-in-out infinite alternate;
-  pointer-events: none;
-  z-index: 0;
+    radial-gradient(circle at 30% 30%, rgba(47,129,247,0.15), transparent 50%),
+    radial-gradient(circle at 70% 70%, rgba(88,166,255,0.1), transparent 50%);
+  animation:bgPulse 15s ease-in-out infinite alternate;
+  pointer-events:none; z-index:0;
 }
+@keyframes bgPulse { 100% { transform:scale(1.3) rotate(-10deg); } }
 
-@keyframes bgPulse {
-  0%   { transform: scale(1) rotate(0deg); }
-  100% { transform: scale(1.3) rotate(10deg); }
-}
-
-/* ===== Card ===== */
 .card {
-  position: relative;
-  z-index: 1;
-  width: 100%;
-  max-width: 460px;
-  background: var(--card);
-  border: 1px solid var(--border);
-  border-radius: 16px;
-  padding: 48px 40px;
-  box-shadow: var(--shadow);
-  animation: slideUp 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+  position:relative; z-index:1; width:100%; max-width:440px;
+  background:var(--card); border:1px solid var(--border);
+  border-radius:16px; padding:48px 40px; box-shadow:var(--shadow);
+  animation:slideUp 0.6s cubic-bezier(0.16,1,0.3,1);
 }
-
-@keyframes slideUp {
-  from { opacity: 0; transform: translateY(30px); }
-  to   { opacity: 1; transform: translateY(0); }
-}
+@keyframes slideUp { from { opacity:0; transform:translateY(30px); } }
 
 .logo {
-  width: 80px;
-  height: 80px;
-  margin: 0 auto 20px;
-  display: block;
-  border-radius: 20px;
-  box-shadow: 0 0 40px rgba(47, 129, 247, 0.4);
-  animation: logoFloat 3s ease-in-out infinite;
+  width:80px; height:80px; margin:0 auto 20px; display:block;
+  border-radius:20px; box-shadow:0 0 40px rgba(47,129,247,0.4);
+  animation:logoFloat 3s ease-in-out infinite;
 }
-
-@keyframes logoFloat {
-  50% { transform: translateY(-8px); box-shadow: 0 0 60px rgba(47, 129, 247, 0.6); }
-}
+@keyframes logoFloat { 50% { transform:translateY(-8px); } }
 
 .title {
-  font-size: 26px;
-  font-weight: 900;
-  text-align: center;
-  margin-bottom: 8px;
-  background: linear-gradient(135deg, #2f81f7, #58a6ff, #79c0ff);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  background-clip: text;
-  text-shadow: 0 0 30px rgba(47, 129, 247, 0.3);
+  font-size:26px; font-weight:900; text-align:center; margin-bottom:8px;
+  background:linear-gradient(135deg,#2f81f7,#58a6ff,#79c0ff);
+  -webkit-background-clip:text; -webkit-text-fill-color:transparent;
+  background-clip:text; text-shadow:0 0 30px rgba(47,129,247,0.3);
 }
-
-.subtitle {
-  text-align: center;
-  color: var(--muted);
-  font-size: 14px;
-  margin-bottom: 32px;
-  line-height: 1.7;
-}
-
-.field { margin-bottom: 20px; }
-
-.label {
-  display: block;
-  font-size: 13px;
-  font-weight: 600;
-  margin-bottom: 8px;
-  color: var(--text);
-}
-
+.subtitle { text-align:center; color:var(--muted); font-size:14px; margin-bottom:32px; line-height:1.7; }
+.field { margin-bottom:20px; }
+.label { display:block; font-size:13px; font-weight:600; margin-bottom:8px; }
 .input {
-  width: 100%;
-  padding: 14px 16px;
-  background: var(--bg);
-  border: 1px solid var(--border);
-  border-radius: 10px;
-  color: var(--text);
-  font-size: 14px;
-  font-family: inherit;
-  outline: none;
-  transition: all 0.25s;
+  width:100%; padding:14px 16px; background:var(--bg);
+  border:1px solid var(--border); border-radius:10px;
+  color:var(--text); font-size:14px; font-family:inherit; outline:none;
+  transition:all 0.25s;
 }
-
 .input:focus {
-  border-color: var(--accent);
-  box-shadow: 0 0 0 4px rgba(47, 129, 247, 0.15);
-  transform: translateY(-1px);
+  border-color:var(--accent); box-shadow:0 0 0 4px rgba(47,129,247,0.15);
+  transform:translateY(-1px);
 }
-
 .btn {
-  width: 100%;
-  padding: 14px;
-  background: var(--accent);
-  border: none;
-  border-radius: 10px;
-  color: #fff;
-  font-size: 15px;
-  font-weight: 700;
-  font-family: inherit;
-  cursor: pointer;
-  transition: all 0.25s;
-  margin-top: 8px;
+  width:100%; padding:14px; background:var(--accent); border:none;
+  border-radius:10px; color:#fff; font-size:15px; font-weight:700;
+  font-family:inherit; cursor:pointer; transition:all 0.25s; margin-top:8px;
 }
-
-.btn:hover {
-  background: var(--accent-hover);
-  transform: translateY(-2px);
-  box-shadow: 0 8px 24px rgba(47, 129, 247, 0.4);
-}
-
-.btn:active { transform: translateY(0); }
-.btn:disabled { opacity: 0.6; cursor: not-allowed; }
-
-.msg {
-  text-align: center;
-  font-size: 13px;
-  margin-top: 16px;
-  min-height: 20px;
-  font-weight: 600;
-}
-.msg.err { color: var(--danger); }
-.msg.ok  { color: var(--success); }
-
-.footer {
-  text-align: center;
-  color: var(--muted);
-  font-size: 11px;
-  margin-top: 28px;
-  letter-spacing: 1px;
-  line-height: 1.8;
-}
-
-.lang-toggle {
-  display: flex;
-  justify-content: center;
-  gap: 6px;
-  margin-top: 20px;
-}
-
+.btn:hover { background:var(--accent-hover); transform:translateY(-2px); box-shadow:0 8px 24px rgba(47,129,247,0.4); }
+.btn:active { transform:translateY(0); }
+.btn:disabled { opacity:0.6; cursor:not-allowed; }
+.msg { text-align:center; font-size:13px; margin-top:16px; min-height:20px; font-weight:600; }
+.msg.err { color:var(--danger); }
+.msg.ok  { color:var(--success); }
+.footer { text-align:center; color:var(--muted); font-size:11px; margin-top:28px; letter-spacing:1px; line-height:1.8; }
+.lang-toggle { display:flex; justify-content:center; gap:6px; margin-top:20px; }
 .lang-toggle button {
-  background: var(--bg);
-  border: 1px solid var(--border);
-  color: var(--muted);
-  padding: 6px 14px;
-  border-radius: 8px;
-  font-family: inherit;
-  font-size: 12px;
-  font-weight: 600;
-  cursor: pointer;
-  transition: all 0.2s;
+  background:var(--bg); border:1px solid var(--border); color:var(--muted);
+  padding:6px 14px; border-radius:8px; font-family:inherit; font-size:12px;
+  font-weight:600; cursor:pointer; transition:all 0.2s;
 }
-
-.lang-toggle button.active {
-  background: var(--accent);
-  color: #fff;
-  border-color: var(--accent);
-}
-
+.lang-toggle button.active { background:var(--accent); color:#fff; border-color:var(--accent); }
 @keyframes shake {
-  0%, 100% { transform: translateX(0); }
-  20%, 60% { transform: translateX(-8px); }
-  40%, 80% { transform: translateX(8px); }
+  0%,100% { transform:translateX(0); }
+  20%,60% { transform:translateX(-8px); }
+  40%,80% { transform:translateX(8px); }
 }
-.shake { animation: shake 0.4s; }
+.shake { animation:shake 0.4s; }
 </style>
 </head>
 <body>
 
 <div class="card" id="card">
   <img class="logo" src="https://ui-avatars.com/api/?name=AP&background=2f81f7&color=fff&size=160&bold=true&font-size=0.5" alt="Apex Panel">
-  <h1 class="title" data-i18n="setup_title">راه‌اندازی اولیه</h1>
-  <p class="subtitle" data-i18n="setup_sub">برای شروع، نام کاربری و رمز عبور مدیر را تعیین کنید</p>
+  <h1 class="title" data-i18n="login_title">ورود به پنل</h1>
+  <p class="subtitle" data-i18n="login_sub">نام کاربری و رمز عبور خود را وارد کنید</p>
 
-  <form id="setupForm" autocomplete="off">
+  <form id="loginForm" autocomplete="off">
     <div class="field">
       <label class="label" data-i18n="username">نام کاربری</label>
       <input class="input" type="text" id="username" required autocomplete="username">
     </div>
     <div class="field">
       <label class="label" data-i18n="password">رمز عبور</label>
-      <input class="input" type="password" id="password" required autocomplete="new-password">
+      <input class="input" type="password" id="password" required autocomplete="current-password">
     </div>
-    <div class="field">
-      <label class="label" data-i18n="confirm">تکرار رمز عبور</label>
-      <input class="input" type="password" id="confirm" required autocomplete="new-password">
-    </div>
-    <button class="btn" type="submit" id="submitBtn" data-i18n="setup_btn">ایجاد پنل</button>
+    <button class="btn" type="submit" id="submitBtn" data-i18n="login_btn">ورود</button>
   </form>
 
   <div class="msg" id="msg"></div>
@@ -254,72 +126,58 @@ body::before {
     <button data-lang="en">EN</button>
   </div>
 
-  <div class="footer">APEX PANEL · SECURE SYSTEM</div>
+  <div class="footer">APEX PANEL · SECURE ACCESS</div>
 </div>
 
 <script>
 const I18N = {
   fa: {
-    setup_title: "راه‌اندازی اولیه",
-    setup_sub: "برای شروع، نام کاربری و رمز عبور مدیر را تعیین کنید",
+    login_title: "ورود به پنل",
+    login_sub: "نام کاربری و رمز عبور خود را وارد کنید",
     username: "نام کاربری",
     password: "رمز عبور",
-    confirm: "تکرار رمز عبور",
-    setup_btn: "ایجاد پنل",
+    login_btn: "ورود",
     err_empty: "همه فیلدها را پر کنید",
-    err_match: "رمز عبور و تکرار آن یکسان نیستند",
-    err_short: "رمز عبور باید حداقل ۴ کاراکتر باشد",
-    ok: "✅ پنل با موفقیت ساخته شد، در حال انتقال..."
+    err_wrong: "نام کاربری یا رمز عبور اشتباه است",
+    ok: "✅ ورود موفق، در حال انتقال..."
   },
   en: {
-    setup_title: "Initial Setup",
-    setup_sub: "Set the administrator username and password to begin",
+    login_title: "Panel Login",
+    login_sub: "Enter your username and password",
     username: "Username",
     password: "Password",
-    confirm: "Confirm Password",
-    setup_btn: "Create Panel",
+    login_btn: "Login",
     err_empty: "Please fill all fields",
-    err_match: "Passwords do not match",
-    err_short: "Password must be at least 4 characters",
-    ok: "✅ Panel created, redirecting..."
+    err_wrong: "Invalid username or password",
+    ok: "✅ Login successful, redirecting..."
   }
 };
 
 let lang = 'fa';
 function t(k) { return I18N[lang][k] || k; }
-
 function applyLang() {
   document.documentElement.lang = lang;
   document.documentElement.dir = lang === 'fa' ? 'rtl' : 'ltr';
-  document.querySelectorAll('[data-i18n]').forEach(el => {
-    el.textContent = t(el.dataset.i18n);
-  });
-  document.querySelectorAll('.lang-toggle button').forEach(b => {
-    b.classList.toggle('active', b.dataset.lang === lang);
-  });
+  document.querySelectorAll('[data-i18n]').forEach(el => el.textContent = t(el.dataset.i18n));
+  document.querySelectorAll('.lang-toggle button').forEach(b => b.classList.toggle('active', b.dataset.lang === lang));
 }
-
 document.querySelectorAll('.lang-toggle button').forEach(btn => {
   btn.addEventListener('click', () => { lang = btn.dataset.lang; applyLang(); });
 });
 
-document.getElementById('setupForm').addEventListener('submit', async (e) => {
+document.getElementById('loginForm').addEventListener('submit', async (e) => {
   e.preventDefault();
   const card = document.getElementById('card');
   const msg = document.getElementById('msg');
   const btn = document.getElementById('submitBtn');
-
   const u = document.getElementById('username').value.trim();
   const p = document.getElementById('password').value;
-  const c = document.getElementById('confirm').value;
 
-  if (!u || !p || !c) { msg.className = 'msg err'; msg.textContent = t('err_empty'); card.classList.add('shake'); setTimeout(() => card.classList.remove('shake'), 400); return; }
-  if (p !== c) { msg.className = 'msg err'; msg.textContent = t('err_match'); card.classList.add('shake'); setTimeout(() => card.classList.remove('shake'), 400); return; }
-  if (p.length < 4) { msg.className = 'msg err'; msg.textContent = t('err_short'); card.classList.add('shake'); setTimeout(() => card.classList.remove('shake'), 400); return; }
+  if (!u || !p) { msg.className = 'msg err'; msg.textContent = t('err_empty'); card.classList.add('shake'); setTimeout(() => card.classList.remove('shake'), 400); return; }
 
   btn.disabled = true;
   try {
-    const r = await fetch('/setup', {
+    const r = await fetch('/login', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ username: u, password: p })
@@ -328,10 +186,12 @@ document.getElementById('setupForm').addEventListener('submit', async (e) => {
     if (data.ok) {
       msg.className = 'msg ok';
       msg.textContent = t('ok');
-      setTimeout(() => window.location.href = '/login', 900);
+      setTimeout(() => window.location.href = '/dashboard', 700);
     } else {
       msg.className = 'msg err';
-      msg.textContent = data.error || 'Error';
+      msg.textContent = t('err_wrong');
+      card.classList.add('shake');
+      setTimeout(() => card.classList.remove('shake'), 400);
       btn.disabled = false;
     }
   } catch (err) {
